@@ -1,6 +1,7 @@
 package br.com.descompila;
 
 import java.io.Console;
+import java.util.List;
 
 import br.com.descompila.exception.ConexaoFalhouException;
 import br.com.descompila.model.dao.ProdutoDAO;
@@ -12,16 +13,20 @@ public class Main {
     static Console console = System.console();
     public static void main(String[] args) {
 
+        char[] passwordArray = console.readPassword("Digite sua senha: ");
+        System.out.println("Senha digitada: " + new String(passwordArray));
+
         int opcao;
         do {
             exibirMenu();
             opcao = Integer.parseInt(console.readLine());
             switch (opcao) {
-                case 1 -> salvarProduto();
+                case 0 -> salvarProduto();
+                case 1 -> buscarTodosProdutos();
                 case 2 -> buscarProdutoPorId();
                 case 3 -> atualizarProduto();
                 case 4 -> excluirProduto();
-                case 5 -> System.out.println("Programa finalizado.");
+                case 5 -> System.exit(0);
                 default -> System.out.println("Opção inválida!");
             }
         } while (opcao != 0);
@@ -30,7 +35,8 @@ public class Main {
 
     private static void exibirMenu() {
         System.out.println("\n### Menu de Operações ###");
-        System.out.println("1. Salvar novo produto");
+        System.out.println("0. Salvar novo produto");
+        System.out.println("1. Buscar todos produtos");
         System.out.println("2. Buscar produto por ID");
         System.out.println("3. Atualizar produto");
         System.out.println("4. Excluir produto");
@@ -51,7 +57,7 @@ public class Main {
         ProdutoDAO produtoDAO = new ProdutoDAO();
         
         try {
-            Produto produtoInserido = produtoDAO.criar(produto);
+            Produto produtoInserido = produtoDAO.salvar(produto);
             if (produtoInserido != null) {
                 System.out.println("Produto criado com sucesso:");
                 System.out.println(produtoInserido);
@@ -62,6 +68,27 @@ public class Main {
             System.err.println(e.getMessage());
         }
         
+    }
+
+    private static void buscarTodosProdutos() {
+        System.out.println("\n### Buscar Todos ###");
+
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        try {
+            List<Produto> produtos = produtoDAO.buscarTodos();
+       
+            if (produtos != null) {
+                System.out.println("Lista de Produtos:");
+                for (Produto produto : produtos) {
+                    System.out.println("Nome: "+produto.nome());
+                }
+            } else {
+                System.out.println("Produto não encontrado.");
+            }
+
+        } catch (ConexaoFalhouException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private static void buscarProdutoPorId() {

@@ -1,6 +1,8 @@
 package br.com.descompila.model.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.descompila.connection.Conexao;
 import br.com.descompila.exception.ConexaoFalhouException;
@@ -9,7 +11,7 @@ import br.com.descompila.model.dto.Produto;
 public class ProdutoDAO {
 
     // Método para criar um novo produto
-    public Produto criar(Produto produto) throws ConexaoFalhouException {
+    public Produto salvar(Produto produto) throws ConexaoFalhouException {
         var sql = "INSERT INTO produto (nome, quantidade, valor) VALUES (?, ?, ?)";
         try (var conn = Conexao.obterConexao();
             var stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -32,6 +34,31 @@ public class ProdutoDAO {
         } catch (SQLException e) {
             throw new ConexaoFalhouException(e);
         }
+    }
+
+    public List<Produto> buscarTodos() throws ConexaoFalhouException {
+
+        String sql = "select * from produto";
+
+        List<Produto> produtos = new ArrayList<>();
+
+        try (var conn = Conexao.obterConexao();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+
+                    Produto produto = new Produto(rs.getLong("id"), rs.getString("nome"),
+                                rs.getInt("quantidade"), rs.getDouble("valor"));
+        
+                    produtos.add(produto);
+                }
+            }
+
+        } catch (SQLException e){
+            throw new ConexaoFalhouException(e);
+        }
+
+        return produtos;
     }
 
     // Método para buscar um produto pelo ID

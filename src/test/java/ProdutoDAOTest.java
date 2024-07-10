@@ -30,7 +30,7 @@ public class ProdutoDAOTest {
     public void testCriarProduto() throws ConexaoFalhouException {
 
         Produto produto = new Produto("Arroz", 1, 5.0);
-        Produto produtoCriado = produtoDAO.criar(produto);
+        Produto produtoCriado = produtoDAO.salvar(produto);
         assertNotNull(produtoCriado);
         assertNotNull(produtoCriado.id());
 
@@ -41,7 +41,7 @@ public class ProdutoDAOTest {
     public void testBuscarProduto() throws ConexaoFalhouException {
         // Verificar se o produto foi criado no teste anterior
         Produto produto = new Produto("Arroz", 1, 5.0);
-        Produto produtoCriado = produtoDAO.criar(produto);
+        Produto produtoCriado = produtoDAO.salvar(produto);
 
         // Buscar produto
         Produto produtoEncontrado = produtoDAO.buscarPorId(produtoCriado.id());
@@ -59,7 +59,7 @@ public class ProdutoDAOTest {
     public void testAtualizarProduto() throws ConexaoFalhouException {
         // Verificar se o produto foi criado no teste anterior
         Produto produto = new Produto("Arroz", 1, 5.0);
-        Produto produtoCriado = produtoDAO.criar(produto);
+        Produto produtoCriado = produtoDAO.salvar(produto);
 
         // Atualizar produto
         produtoCriado = new Produto(produtoCriado.id(), "Novo Nome", 20, 200.0);
@@ -78,7 +78,7 @@ public class ProdutoDAOTest {
     public void testExcluirProduto() throws ConexaoFalhouException {
         // Verificar se o produto foi criado no teste anterior
         Produto produto = new Produto("Arroz", 1, 5.0);
-        Produto produtoCriado = produtoDAO.criar(produto);
+        Produto produtoCriado = produtoDAO.salvar(produto);
 
         // Excluir produto
         produtoDAO.excluir(produtoCriado.id());
