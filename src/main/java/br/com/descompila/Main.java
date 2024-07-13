@@ -12,10 +12,7 @@ public class Main {
 
     static Console console = System.console();
     public static void main(String[] args) {
-
-        char[] passwordArray = console.readPassword("Digite sua senha: ");
-        System.out.println("Senha digitada: " + new String(passwordArray));
-
+        
         int opcao;
         do {
             exibirMenu();
