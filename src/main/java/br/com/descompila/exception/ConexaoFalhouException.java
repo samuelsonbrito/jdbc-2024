@@ -1,11 +1,12 @@
 package br.com.descompila.exception;
 
 public class ConexaoFalhouException extends Exception {
-    public ConexaoFalhouException(Throwable cause){
+    
+    public ConexaoFalhouException(String cause){
         super(cause);
     }
 
-    public ConexaoFalhouException(String cause){
+    public ConexaoFalhouException(Throwable cause){
         super(cause);
     }
 }
