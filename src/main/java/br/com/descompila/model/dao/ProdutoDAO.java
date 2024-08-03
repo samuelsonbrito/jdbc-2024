@@ -11,26 +11,14 @@ import br.com.descompila.model.dto.Produto;
 public class ProdutoDAO {
 
     // Método para criar um novo produto
-    public Produto salvar(Produto produto) throws ConexaoFalhouException {
+    public void salvar(Produto produto) throws ConexaoFalhouException {
         var sql = "INSERT INTO produto (nome, quantidade, valor) VALUES (?, ?, ?)";
         try (var conn = Conexao.obterConexao();
-            var stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            var stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, produto.nome());
                 stmt.setInt(2, produto.quantidade());
                 stmt.setDouble(3, produto.valor());
-                int linhasAfetadas = stmt.executeUpdate();
-        
-            if (linhasAfetadas > 0) {
-                try (var rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        var id = rs.getLong(1); // Retorna o ID gerado
-                        var produtoInserido = new Produto(id, produto.nome(), produto.quantidade(), produto.valor());
-                        return produtoInserido;
-                    }
-                } 
-            }
-        
-            return null;
+                stmt.executeUpdate();
         } catch (SQLException e) {
             throw new ConexaoFalhouException(e);
         }

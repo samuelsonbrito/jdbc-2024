@@ -54,13 +54,8 @@ public class Main {
         ProdutoDAO produtoDAO = new ProdutoDAO();
         
         try {
-            Produto produtoInserido = produtoDAO.salvar(produto);
-            if (produtoInserido != null) {
-                System.out.println("Produto criado com sucesso:");
-                System.out.println(produtoInserido);
-            } else {
-                System.out.println("Falha ao criar o produto.");
-            }
+            produtoDAO.salvar(produto);
+            System.out.println("Produto criado com sucesso:");
         } catch (ConexaoFalhouException e) {
             System.err.println(e.getMessage());
         }
